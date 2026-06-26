@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Estoicismo — Un Sendero Estrecho</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo.png" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    .curso-hero {
+      padding: calc(var(--espacio-2xl) + var(--espacio-sm)) 0 var(--espacio-xl);
+      border-bottom: 1px solid var(--color-borde);
+    }
+    .curso-hero__cat {
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.3em;
+      color: var(--color-dorado);
+      display: block;
+      margin-bottom: var(--espacio-xs);
+    }
+    .curso-hero__titulo {
+      font-family: var(--fuente-titulo);
+      font-size: clamp(var(--texto-2xl), 5vw, var(--texto-3xl));
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: var(--espacio-sm);
+    }
+    .curso-hero__desc {
+      font-size: var(--texto-md);
+      color: var(--color-texto-suave);
+      max-width: 680px;
+      line-height: 1.8;
+      margin-bottom: var(--espacio-lg);
+    }
+    .curso-meta {
+      display: flex;
+      gap: var(--espacio-lg);
+      flex-wrap: wrap;
+    }
+    .curso-meta__item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.15em;
+      color: var(--color-texto-suave);
+    }
+    .curso-meta__item span:first-child { color: var(--color-dorado); }
+
+    /* Layout de dos columnas */
+    .curso-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: var(--espacio-xl);
+      padding: var(--espacio-xl) 0 var(--espacio-2xl);
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .curso-layout { grid-template-columns: 1fr; }
+      .curso-sidebar { order: -1; }
+    }
+
+    /* Video embed */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: var(--radio-md);
+      border: 1px solid var(--color-borde);
+      margin-bottom: var(--espacio-lg);
+      background: var(--color-fondo-medio);
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Módulos */
+    .modulos-lista { list-style: none; margin-bottom: var(--espacio-lg); }
+    .modulo {
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-md);
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+    .modulo__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--espacio-sm) var(--espacio-md);
+      cursor: pointer;
+      background: var(--color-fondo-medio);
+      transition: background var(--transicion);
+    }
+    .modulo__header:hover { background: var(--color-fondo-suave); }
+    .modulo__num {
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.2em;
+      color: var(--color-dorado);
+      margin-right: var(--espacio-sm);
+    }
+    .modulo__titulo {
+      font-family: var(--fuente-titulo);
+      font-size: var(--texto-base);
+      font-weight: 400;
+      flex: 1;
+    }
+    .modulo__flecha {
+      color: var(--color-dorado);
+      font-size: 0.75rem;
+      transition: transform var(--transicion);
+    }
+    .modulo.abierto .modulo__flecha { transform: rotate(180deg); }
+    .modulo__cuerpo {
+      display: none;
+      padding: var(--espacio-md);
+      border-top: 1px solid var(--color-borde);
+      color: var(--color-texto-suave);
+      font-size: var(--texto-sm);
+      line-height: 1.75;
+    }
+    .modulo.abierto .modulo__cuerpo { display: block; }
+
+    /* Sidebar */
+    .curso-sidebar {
+      position: sticky;
+      top: calc(var(--espacio-lg) + 60px);
+    }
+    .sidebar-caja {
+      background: var(--color-fondo-medio);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-md);
+      padding: var(--espacio-lg);
+      margin-bottom: var(--espacio-md);
+    }
+    .sidebar-caja__titulo {
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.2em;
+      color: var(--color-dorado);
+      margin-bottom: var(--espacio-sm);
+      display: block;
+    }
+    .sidebar-caja p, .sidebar-caja li {
+      font-size: var(--texto-sm);
+      color: var(--color-texto-suave);
+      line-height: 1.75;
+    }
+    .sidebar-caja ul { list-style: none; }
+    .sidebar-caja li {
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--color-borde);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sidebar-caja li::before { content: '✦'; color: var(--color-dorado); font-size: 0.6rem; }
+    .sidebar-caja li:last-child { border-bottom: none; }
+
+    /* Cuerpo del texto del curso */
+    .curso-texto { max-width: 700px; }
+    .curso-texto h2 {
+      font-family: var(--fuente-titulo);
+      font-size: var(--texto-xl);
+      font-weight: 400;
+      color: var(--color-texto);
+      margin: var(--espacio-lg) 0 var(--espacio-sm);
+    }
+    .curso-texto h3 {
+      font-family: var(--fuente-util);
+      font-size: var(--texto-sm);
+      letter-spacing: 0.2em;
+      color: var(--color-dorado);
+      margin: var(--espacio-md) 0 var(--espacio-xs);
+    }
+    .curso-texto p {
+      color: var(--color-texto-suave);
+      line-height: 1.85;
+      margin-bottom: var(--espacio-sm);
+    }
+    .curso-texto blockquote {
+      border-left: 2px solid var(--color-dorado);
+      padding-left: var(--espacio-md);
+      margin: var(--espacio-lg) 0;
+      font-style: italic;
+      color: var(--color-texto);
+      font-size: var(--texto-md);
+      line-height: 1.7;
+    }
+    .curso-texto blockquote cite {
+      display: block;
+      font-style: normal;
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.15em;
+      color: var(--color-dorado);
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav scrolled">
+    <div class="nav__inner">
+      <a href="/contenido/index.html" class="nav__logo">
+        <img src="/assets/img/logo.png" alt="Logo" class="nav__logo-img" />
+        <span class="nav__logo-nombre">UN SENDERO ESTRECHO</span>
+      </a>
+      <ul class="nav__links">
+        <li><a href="/contenido/index.html">← Volver a cursos</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO DEL CURSO -->
+  <div class="curso-hero">
+    <div class="contenedor">
+      <span class="curso-hero__cat">Filosofía</span>
+      <h1 class="curso-hero__titulo">Estoicismo</h1>
+      <p class="curso-hero__desc">
+        Marco Aurelio, Epicteto, Séneca. La filosofía práctica de quien no puede permitirse
+        el lujo de quejarse. Un sistema de vida, no una colección de citas motivacionales.
+      </p>
+      <div class="curso-meta">
+        <div class="curso-meta__item"><span>⏱</span><span>8 módulos · ~4 horas</span></div>
+        <div class="curso-meta__item"><span>📶</span><span>Introductorio / Intermedio</span></div>
+        <div class="curso-meta__item"><span>✦</span><span>Filosofía práctica</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="contenedor">
+    <div class="curso-layout">
+
+      <!-- COLUMNA PRINCIPAL -->
+      <div>
+        <!-- Video intro -->
+        <div class="video-wrapper">
+          <!-- Reemplazar VIDEO_ID con el ID real de YouTube -->
+          <iframe
+            src="https://www.youtube.com/embed/VIDEO_ID"
+            title="Introducción al Estoicismo"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+
+        <!-- Módulos / Índice del curso -->
+        <h2 style="font-family: var(--fuente-util); font-size: var(--texto-sm); letter-spacing: 0.2em; color: var(--color-dorado); margin-bottom: var(--espacio-md);">MÓDULOS DEL CURSO</h2>
+        <ul class="modulos-lista">
+          <li class="modulo abierto">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">01</span>
+              <span class="modulo__titulo">¿Qué es el Estoicismo? Contexto histórico</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              Grecia y Roma como cuna de la filosofía práctica. La Stoa Poikile y los fundadores.
+              Por qué el estoicismo resurgió en el siglo XXI y qué dice eso de nuestra época.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">02</span>
+              <span class="modulo__titulo">La dicotomía del control</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              El concepto más importante del estoicismo: lo que depende de nosotros y lo que no.
+              Epicteto y el Enchiridión. Aplicaciones prácticas en el mundo contemporáneo.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">03</span>
+              <span class="modulo__titulo">Marco Aurelio: la filosofía desde el poder</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              Las Meditaciones como diario de práctica, no como tratado teórico.
+              Cómo gobernar (y vivir) con integridad cuando el poder corrompe a todos los demás.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">04</span>
+              <span class="modulo__titulo">Séneca: el tiempo y la muerte</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              "Sobre la brevedad de la vida". La meditación sobre la muerte como herramienta,
+              no como morbosidad. El tiempo como único recurso no renovable.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">05</span>
+              <span class="modulo__titulo">Las emociones estoicas: no es lo que creés</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              El estoicismo no es suprimir emociones: es no ser dominado por ellas.
+              Pasiones vs. eupatheiai. La diferencia entre serenidad y anestesia emocional.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">06</span>
+              <span class="modulo__titulo">Virtud como único bien verdadero</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              La ética estoica y su radicalidad: riqueza, fama y salud son "indiferentes".
+              Por qué esto es contraintuitivo y por qué aun así tiene sentido.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">07</span>
+              <span class="modulo__titulo">Estoicismo y el mundo moderno</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              Ryan Holiday, Tim Ferriss y el estoicismo pop. Qué se pierde y qué se gana
+              en la divulgación masiva. La versión completa que los best-sellers no cuentan.
+            </div>
+          </li>
+          <li class="modulo">
+            <div class="modulo__header" onclick="toggleModulo(this)">
+              <span class="modulo__num">08</span>
+              <span class="modulo__titulo">Práctica estoica: ejercicios concretos</span>
+              <span class="modulo__flecha">▼</span>
+            </div>
+            <div class="modulo__cuerpo">
+              Visualización negativa, el diario de Marco Aurelio, la meditación matutina.
+              Cómo integrar el estoicismo en la vida real sin convertirlo en otra moda de productividad.
+            </div>
+          </li>
+        </ul>
+
+        <!-- Texto del curso -->
+        <div class="curso-texto">
+          <h2>Introducción</h2>
+          <p>
+            El estoicismo no es una filosofía de la resignación ni una colección de frases
+            para poner en fondos de pantalla. Es un sistema riguroso para vivir bien bajo
+            condiciones adversas — y Grecia y Roma sabían perfectamente lo que era la adversidad.
+          </p>
+          <blockquote>
+            No son las cosas las que perturban a los hombres, sino las opiniones sobre las cosas.
+            <cite>— Epicteto, Enchiridión</cite>
+          </blockquote>
+          <p>
+            Esta distinción — entre lo que ocurre y nuestra interpretación de lo que ocurre —
+            es el núcleo de toda la tradición estoica. Y es, también, una de las ideas más
+            poderosas y difíciles de internalizar que cualquier filosofía haya producido jamás.
+          </p>
+          <h3>POR QUÉ AHORA</h3>
+          <p>
+            El estoicismo resurge en épocas de incertidumbre. No por casualidad se convirtió en
+            la filosofía dominante durante la crisis de la República romana y el Imperio tardío.
+            Tampoco por casualidad es hoy uno de los sistemas de pensamiento más buscados en
+            una época de colapso institucional, sobreinformación y pérdida de marcos de sentido.
+          </p>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="curso-sidebar">
+        <div class="sidebar-caja">
+          <span class="sidebar-caja__titulo">LO QUE VAS A APRENDER</span>
+          <ul>
+            <li>La dicotomía del control y sus aplicaciones reales</li>
+            <li>Leer las Meditaciones de Marco Aurelio con profundidad</li>
+            <li>Distinguir el estoicismo real del estoicismo pop</li>
+            <li>Ejercicios prácticos integrables en la vida cotidiana</li>
+            <li>Conectar el estoicismo con otras tradiciones filosóficas</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-caja">
+          <span class="sidebar-caja__titulo">LECTURAS RECOMENDADAS</span>
+          <ul>
+            <li>Meditaciones — Marco Aurelio</li>
+            <li>Enchiridión — Epicteto</li>
+            <li>Sobre la brevedad de la vida — Séneca</li>
+            <li>Cartas a Lucilio — Séneca</li>
+          </ul>
+        </div>
+
+        <a href="/contenido/index.html" class="btn btn--secundario" style="width:100%; text-align:center;">
+          ← VOLVER A CURSOS
+        </a>
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleModulo(header) {
+      const modulo = header.parentElement;
+      modulo.classList.toggle('abierto');
+    }
+  </script>
+
+</body>
+</html>

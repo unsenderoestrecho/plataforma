@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+locale: "es"
+
+collections:
+  - name: "cursos"
+    label: "Cursos"
+    folder: "content/cursos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Categoría", name: "categoria", widget: "select", options: ["Filosofía", "Psicología", "Esoterismo", "Historia", "Economía", "Espiritualidad", "Política", "Salud", "Arte", "Desarrollo Personal"] }
+      - { label: "Descripción corta", name: "descripcion", widget: "text" }
+      - { label: "Imagen de portada", name: "imagen", widget: "image", required: false }
+      - { label: "Video de introducción (URL YouTube)", name: "video_intro", widget: "string", required: false }
+      - { label: "Duración estimada", name: "duracion", widget: "string", required: false }
+      - { label: "Nivel", name: "nivel", widget: "select", options: ["Introductorio", "Intermedio", "Avanzado"] }
+      - label: "Módulos"
+        name: "modulos"
+        widget: "list"
+        fields:
+          - { label: "Título del módulo", name: "titulo", widget: "string" }
+          - { label: "Descripción", name: "descripcion", widget: "text" }
+      - { label: "Contenido completo", name: "body", widget: "markdown" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: false }
+
+  - name: "articulos"
+    label: "Artículos"
+    folder: "content/articulos"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Fecha", name: "date", widget: "datetime" }
+      - { label: "Categoría", name: "categoria", widget: "select", options: ["Filosofía", "Psicología", "Esoterismo", "Historia", "Economía", "Espiritualidad", "Política", "Salud", "Arte", "Desarrollo Personal"] }
+      - { label: "Resumen", name: "resumen", widget: "text" }
+      - { label: "Video relacionado (URL YouTube)", name: "video", widget: "string", required: false }
+      - { label: "Imagen destacada", name: "imagen", widget: "image", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: false }
