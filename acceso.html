@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Ingresar — Un Sendero Estrecho</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo.png" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: var(--espacio-lg);
+    }
+    .acceso-logo {
+      width: 72px;
+      margin-bottom: var(--espacio-lg);
+      animation: aparecer 0.8s ease both;
+    }
+    .acceso-titulo {
+      font-family: var(--fuente-titulo);
+      font-size: var(--texto-xl);
+      font-weight: 400;
+      color: var(--color-texto);
+      margin-bottom: var(--espacio-xs);
+      animation: aparecer 0.8s ease 0.1s both;
+    }
+    .acceso-sub {
+      color: var(--color-texto-suave);
+      font-size: var(--texto-sm);
+      margin-bottom: var(--espacio-xl);
+      animation: aparecer 0.8s ease 0.2s both;
+    }
+    .acceso-form {
+      animation: aparecer 0.8s ease 0.3s both;
+      width: 100%;
+      max-width: 400px;
+    }
+    .acceso-volver {
+      margin-top: var(--espacio-lg);
+      font-family: var(--fuente-util);
+      font-size: var(--texto-xs);
+      letter-spacing: 0.15em;
+      color: var(--color-texto-tenue);
+      animation: aparecer 0.8s ease 0.4s both;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="/assets/img/logo.png" alt="Un Sendero Estrecho" class="acceso-logo" />
+  <h1 class="acceso-titulo">Ingresá al sendero</h1>
+  <p class="acceso-sub">Usá el código que recibiste al completar tu acceso.</p>
+
+  <div class="acceso-form">
+    <div class="acceso-form__campo" style="flex-direction: column; gap: 0.75rem;">
+      <input
+        type="text"
+        id="codigoInput"
+        class="acceso-form__input"
+        placeholder="TU CÓDIGO DE ACCESO"
+        maxlength="30"
+        autofocus
+      />
+      <button class="btn btn--primario" style="width:100%;" onclick="validarCodigo()">
+        INGRESAR
+      </button>
+    </div>
+    <p class="acceso-form__error" id="errorAcceso"></p>
+  </div>
+
+  <p class="acceso-volver">
+    ¿No tenés código aún? <a href="/#acceso" style="color: var(--color-dorado);">Obtener acceso</a>
+  </p>
+
+  <script>
+    async function validarCodigo() {
+      const input = document.getElementById('codigoInput');
+      const errorEl = document.getElementById('errorAcceso');
+      const codigo = (input?.value || '').trim().toUpperCase();
+
+      if (!codigo) {
+        errorEl.style.color = '#E05050';
+        errorEl.textContent = 'Ingresá tu código de acceso.';
+        return;
+      }
+
+      const btn = document.querySelector('.btn--primario');
+      btn.textContent = '...';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/.netlify/functions/validar-acceso', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codigo }),
+        });
+
+        const data = await res.json();
+
+        if (data.valido && data.redireccion) {
+          errorEl.style.color = '#6DBF8A';
+          errorEl.textContent = '✦ Acceso concedido. Entrando...';
+          setTimeout(() => { window.location.href = data.redireccion; }, 700);
+        } else {
+          errorEl.style.color = '#E05050';
+          errorEl.textContent = 'Código incorrecto. Verificá tu compra o escribinos.';
+          btn.textContent = 'INGRESAR';
+          btn.disabled = false;
+        }
+      } catch {
+        errorEl.style.color = '#E05050';
+        errorEl.textContent = 'Error de conexión. Intentá de nuevo.';
+        btn.textContent = 'INGRESAR';
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById('codigoInput')?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') validarCodigo();
+    });
+  </script>
+
+</body>
+</html>
